@@ -1,0 +1,32 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    object      U;
+}
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (20 0 0); // 20 m/s wind in the X direction
+
+boundaryField
+{
+    inlet
+    {
+        type            fixedValue;
+        value           $internalField;
+    }
+    outlet
+    {
+        type            zeroGradient;
+    }
+    walls
+    {
+        type            slip; // Air slides along the tunnel walls
+    }
+    talon
+    {
+        type            noSlip; // Air "sticks" to the plane (creates drag)
+    }
+}

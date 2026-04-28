@@ -1,0 +1,6 @@
+processor*
+[1-9]*
+0.*
+constant/polyMesh
+*.foam
+postProcessing/

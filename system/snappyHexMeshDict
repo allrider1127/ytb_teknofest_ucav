@@ -1,0 +1,118 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           | Website:  www.openfoam.com
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      snappyHexMeshDict;
+}
+
+castellatedMesh true;
+snap            true;
+addLayers       false; // Keep it false for the first run to ensure it works
+
+geometry
+{
+    talon.stl
+    {
+        type triSurfaceMesh;
+        name talon;
+    }
+};
+
+castellatedMeshControls
+{
+    maxLocalCells 1000000;
+    maxGlobalCells 2000000;
+    minRefinementCells 10;
+    nCellsBetweenLevels 3;
+
+    // ADD THIS BLOCK STARTING HERE:
+    features
+    (
+        {
+            file "talon.eMesh";
+            level 6; // High refinement on the sharp edges
+        }
+    );
+    // END OF NEW BLOCK
+
+resolveFeatureAngle 30;
+
+allowFreeStandingZoneFaces true;
+
+    refinementSurfaces
+    {
+        talon
+        {
+            level (4 5); // This makes the mesh very fine near the wings
+        }
+    }
+
+    refinementRegions
+    {
+        talon
+        {
+            mode distance;
+            levels ((0.5 4)); // Extra refinement 0.5m around the plane
+        }
+    }
+
+    locationInMesh (0.1 0.1 0.1); // IMPORTANT: A point INSIDE the air, OUTSIDE the plane
+}
+
+snapControls
+{
+    nSmoothPatch 3;
+    tolerance 2.0;
+    nSolveIter 30;
+    nRelaxIter 5;
+}
+
+addLayersControls
+{
+    relativeSizes       true;
+    layers
+    {
+        "talon.*"
+        {
+            nSurfaceLayers 3;
+        }
+    }
+    expansionRatio      1.0;
+    finalLayerThickness 0.3;
+    minThickness        0.1;
+    nGrow               0;
+}
+
+meshQualityControls
+{
+    maxNonOrtho         65;
+    maxBoundarySkewness 20;
+    maxInternalSkewness 4;
+    maxConcave          80;
+    minVol              1e-13;
+    minTetQuality       1e-30;
+    minArea             -1;
+    minTwist            -1;      // This fixes the current error
+    minDeterminant      0.001;
+    minFaceWeight       0.02;
+    minVolRatio         0.01;
+    minTriangleTwist    -1;
+    
+    // Added for stability in newer OF versions
+    nSmoothScale        4;
+    errorReduction      0.75;
+    
+    // Advanced quality checks
+    minFlatness         0.5;
+    maxThicknessRatio   10;
+}
+
+mergeTolerance 1e-6;

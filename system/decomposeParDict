@@ -1,0 +1,10 @@
+FoamFile { version 2.0; format ascii; class dictionary; object decomposeParDict; }
+
+numberOfSubdomains 4; // Set this to the number of cores you want to use (e.g., 4)
+
+method          simple;
+
+coeffs
+{
+    n           (2 2 1); // This multiplies to your numberOfSubdomains (2*2*1 = 4)
+}
