@@ -70,8 +70,6 @@ Core Engineering Concepts
     - Mesh Refinement: High-density cell clustering on leading edges and trailing wakes to capture the "Stagnation Point" and boundary layer physics accurately.
     - Wake Analysis: Analysis of the velocity deficit in the wake region allows for iterative fuselage optimization to minimize parasitic drag.
 
-<img width="3999" height="1860" alt="image" src="https://github.com/user-attachments/assets/0904fe96-28d6-4162-b93b-260cf0794011" />
-
 
 ## Visualization Note
 
