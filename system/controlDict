@@ -14,7 +14,7 @@ FoamFile
 }
 
 application     simpleFoam;
-startFrom       startTime;
+startFrom       latestTime;
 startTime       0;
 stopAt          endTime;
 endTime         1000;
@@ -28,3 +28,25 @@ writeCompression off;
 timeFormat      general;
 timePrecision   6;
 runTimeModifiable true;
+
+functions
+{
+    forces
+    {
+        type            forceCoeffs;
+        libs            (forces);
+        writeControl    timeStep;
+        writeInterval   1;
+
+        patches         ( talon ); // Must match your patch name in boundary file
+        rho             rhoInf;      
+        rhoInf          1.225;     // Sea level air density
+        CofR            (0.15 0 0); // Center of Rotation (Your CG location)
+        liftDir         (0 0 1);   // Your Lift direction (usually Z)
+        dragDir         (1 0 0);   // Your Drag direction (usually X)
+        pitchAxis       (0 1 0);   // Your Pitch axis (usually Y)
+        magUInf         20;        // Your cruise speed in m/s
+        lRef            0.25;      // Mean Aerodynamic Chord (MAC) of Talon
+        Aref            0.45;      // Reference Wing Area (m^2)
+    }
+}
